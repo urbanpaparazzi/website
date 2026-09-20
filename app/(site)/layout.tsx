@@ -21,7 +21,7 @@ export default async function SiteLayout({
     <div>
       <Header categories={adaptedCategories} />
       {children}
-      <Footer news={adaptedNews} />
+      <Footer country={null} news={adaptedNews} />
     </div>
   );
 }

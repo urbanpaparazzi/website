@@ -31,7 +31,12 @@ export default async function HomePage() {
         <div className={styles.container__width}>
           <HeroNews news={adaptedNews} />
         </div>
-        <BreakingNews news={adaptedNews} categories={adaptedCategories} />
+        <BreakingNews
+          header="Featured Stories"
+          bg="#333333"
+          news={adaptedNews}
+          categories={adaptedCategories}
+        />
       </div>
     </div>
   );
