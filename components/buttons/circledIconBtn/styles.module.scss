@@ -1,0 +1,37 @@
+.button {
+  position: relative;
+  border: none;
+  outline: none;
+  width: 220px;
+  height: 55px;
+  border-radius: 55px;
+  font-weight: 600;
+  color: #ccc;
+  background: #379237;
+  display: block;
+  cursor: pointer;
+  &:hover {
+    background: #54b435;
+    border: 1px solid #379237;
+    color: #ccc;
+    .svg__wrap {
+      svg {
+        fill: #ccc;
+      }
+    }
+  }
+  .svg__wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 7.5px;
+    right: 5px;
+    background: #54b435;
+    svg {
+      fill: #ccc;
+    }
+  }
+}
