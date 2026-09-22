@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
 import { NEWS_QUERY, VIDEOS_QUERY } from "@/sanity/lib/queries";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.ng";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [{ data: news }, { data: videos }] = await Promise.all([

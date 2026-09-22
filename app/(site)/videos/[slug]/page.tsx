@@ -15,7 +15,7 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.ng";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.com";
 
 async function getVideo(slug: string) {
   const { data } = await sanityFetch({ query: VIDEO_QUERY, params: { slug } });
@@ -32,7 +32,12 @@ export async function generateMetadata({
   const description = toPlainText(video.description);
   const canonicalUrl = `${baseUrl}/videos/${slug}`;
   const imageUrl = video.thumbnail
-    ? urlFor(video.thumbnail).width(1200).height(675).url()
+    ? urlFor(video.thumbnail)
+        .width(1200)
+        .height(675)
+        .fit("crop")
+        .format("jpg")
+        .url()
     : undefined;
 
   return {
@@ -44,7 +49,9 @@ export async function generateMetadata({
       url: canonicalUrl,
       title: video.title,
       description,
-      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 675 }] : [],
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 675, alt: video.title }]
+        : [],
     },
     twitter: {
       card: "summary_large_image",
@@ -61,7 +68,12 @@ export default async function VideoPage({ params }: PageProps) {
   if (!video) notFound();
   const canonicalUrl = `${baseUrl}/videos/${slug}`;
   const thumbnailUrl = video.thumbnail
-    ? urlFor(video.thumbnail).width(1200).height(675).url()
+    ? urlFor(video.thumbnail)
+        .width(1200)
+        .height(675)
+        .fit("crop")
+        .format("jpg")
+        .url()
     : undefined;
   const structuredData = {
     "@context": "https://schema.org",

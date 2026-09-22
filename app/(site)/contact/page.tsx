@@ -10,7 +10,7 @@ export default function ContactPage() {
       <h1>Contact Us</h1>
       <p>
         Reach out to the Urban Paparazzi team at{" "}
-        <a href="mailto:hello@urbanpaparazzi.ng">hello@urbanpaparazzi.ng</a>.
+        <a href="mailto:hello@urbanpaparazzi.com">hello@urbanpaparazzi.com</a>.
       </p>
     </div>
   );

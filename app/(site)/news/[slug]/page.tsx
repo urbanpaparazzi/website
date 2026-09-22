@@ -36,7 +36,12 @@ export async function generateMetadata({
   const description = post.excerpt || toPlainText(post.body);
   const canonicalUrl = `${baseUrl}/news/${slug}`;
   const imageUrl = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(630).url()
+    ? urlFor(post.coverImage)
+        .width(1200)
+        .height(630)
+        .fit("crop")
+        .format("jpg")
+        .url()
     : undefined;
 
   return {
@@ -50,7 +55,9 @@ export async function generateMetadata({
       description,
       publishedTime: post.publishedAt,
       authors: post.author?.name ? [post.author.name] : ["Urban Paparazzi"],
-      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: post.title }]
+        : [],
     },
     twitter: {
       card: "summary_large_image",
@@ -89,7 +96,12 @@ export default async function NewsPostPage({ params }: PageProps) {
   const galleryImages = getGalleryImages(post);
   const canonicalUrl = `${baseUrl}/news/${slug}`;
   const imageUrl = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(630).url()
+    ? urlFor(post.coverImage)
+        .width(1200)
+        .height(630)
+        .fit("crop")
+        .format("jpg")
+        .url()
     : undefined;
   const structuredData = {
     "@context": "https://schema.org",
@@ -127,7 +139,7 @@ export default async function NewsPostPage({ params }: PageProps) {
         ))}
       </div>
       <h1 className="text-3xl font-bold">{post.title}</h1>
-      <div className="mt-2 flex items-center gap-4 text-xs md:text-sm text-gray-500">
+      <div className="mt-2 flex items-center gap-2 text-xs md:text-sm text-gray-500">
         {post.author?.name && <span>By {post.author.name}</span>}
         <span className="flex items-center gap-1">
           <IoTimeOutline /> {dayjs(post.publishedAt).format("MMMM D, YYYY")}

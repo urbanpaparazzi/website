@@ -3,7 +3,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.ng";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.com";
 const siteName = "Urban Paparazzi Nigeria";
 const siteDescription =
   "Urban Paparazzi is a Nigerian digital magazine covering breaking news, entertainment, celebrity culture, lifestyle, interviews and original video stories.";
