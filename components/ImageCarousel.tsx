@@ -69,7 +69,9 @@ export default function ImageCarousel({
         <>
           <button
             type="button"
-            onClick={() => goTo((currentIndex - 1 + images.length) % images.length)}
+            onClick={() =>
+              goTo((currentIndex - 1 + images.length) % images.length)
+            }
             className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 p-2 text-white transition hover:bg-black/90 focus:outline-none focus:ring-2 focus:ring-white sm:left-4"
             aria-label="Previous image"
           >

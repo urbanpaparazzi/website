@@ -83,7 +83,8 @@ export const newsPost = defineType({
         defineArrayMember({ type: "block" }),
         defineArrayMember({ type: "image", options: { hotspot: true } }),
       ],
-      description: "Add text blocks and upload images directly between paragraphs.",
+      description:
+        "Add text blocks and upload images directly between paragraphs.",
     }),
   ],
   preview: {
