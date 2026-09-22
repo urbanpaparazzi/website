@@ -24,8 +24,8 @@ export const portableTextComponents: PortableTextComponents = {
           alt={value.alt || ""}
           width={width}
           height={height}
-          sizes="(max-width: 640px) 100vw, 384px"
-          className="not-prose my-4 h-auto w-full rounded-lg sm:float-left sm:mr-6 sm:mb-4 sm:w-auto sm:max-w-sm"
+          sizes="(max-width: 768px) 100vw, 768px"
+          className="not-prose my-6 h-auto w-full rounded-lg object-contain"
         />
       );
     },

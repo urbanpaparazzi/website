@@ -108,6 +108,7 @@ export const NEWS_POST_QUERY = defineQuery(`
   slug,
   excerpt,
   coverImage,
+  galleryImages,
   categories[]->{ _id, title, slug },
   author->{ _id, name, slug, photo, role, bio },
   body,

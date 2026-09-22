@@ -10,6 +10,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { portableTextComponents } from "@/sanity/lib/portableTextComponents";
 import { toPlainText } from "@/sanity/lib/toPlainText";
 import ViewTracker from "@/components/ViewTracker";
+import ImageCarousel from "@/components/ImageCarousel";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -44,10 +45,32 @@ export async function generateMetadata({
   };
 }
 
+function getGalleryImages(post: any) {
+  const allImages = [
+    ...(post.coverImage ? [post.coverImage] : []),
+    ...(post.galleryImages || []),
+  ];
+  const seenRefs = new Set<string>();
+
+  return allImages
+    .filter((image: any) => {
+      const ref = image?.asset?._ref;
+      if (!ref) return false;
+      if (seenRefs.has(ref)) return false;
+      seenRefs.add(ref);
+      return true;
+    })
+    .map((image: any) => ({
+      ...image,
+      url: urlFor(image).width(1600).auto("format").url(),
+    }));
+}
+
 export default async function NewsPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+  const galleryImages = getGalleryImages(post);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-8">
@@ -73,15 +96,12 @@ export default async function NewsPostPage({ params }: PageProps) {
         </span>
       </div>
 
-      {post.coverImage && (
-        <div className="relative my-6 aspect-video w-full overflow-hidden rounded-lg">
-          <Image
-            src={urlFor(post.coverImage).width(1200).url()}
-            alt={post.title}
-            fill
-            className="object-cover"
-          />
-        </div>
+      {galleryImages.length > 0 && (
+        <ImageCarousel
+          images={galleryImages}
+          title={post.title}
+          autoSwipeInterval={5000}
+        />
       )}
 
       <div className="prose max-w-none">
