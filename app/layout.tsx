@@ -3,7 +3,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.ng";
 const siteName = "Urban Paparazzi Nigeria";
 const siteDescription =
   "Urban Paparazzi is a Nigerian digital magazine covering breaking news, entertainment, celebrity culture, lifestyle, interviews and original video stories.";
@@ -66,6 +66,14 @@ export const metadata: Metadata = {
     icon: "/logo.png",
   },
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: siteName,
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -75,11 +83,24 @@ export default function RootLayout({
 }) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteName,
-    url: baseUrl,
-    logo: `${baseUrl}/logo.png`,
-    description: siteDescription,
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${baseUrl}/#organization`,
+        name: siteName,
+        url: baseUrl,
+        logo: `${baseUrl}/logo.png`,
+        description: siteDescription,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${baseUrl}/#website`,
+        name: siteName,
+        url: baseUrl,
+        publisher: { "@id": `${baseUrl}/#organization` },
+        inLanguage: "en-NG",
+      },
+    ],
   };
 
   return (

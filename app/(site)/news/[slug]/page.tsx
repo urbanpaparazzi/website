@@ -16,6 +16,8 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.com";
+
 async function getPost(slug: string) {
   const { data } = await sanityFetch({
     query: NEWS_POST_QUERY,
@@ -32,15 +34,29 @@ export async function generateMetadata({
   if (!post) return {};
 
   const description = post.excerpt || toPlainText(post.body);
+  const canonicalUrl = `${baseUrl}/news/${slug}`;
+  const imageUrl = post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).url()
+    : undefined;
+
   return {
     title: `${post.title} | Urban Paparazzi Nigeria`,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
+      type: "article",
+      url: canonicalUrl,
       title: post.title,
       description,
-      images: post.coverImage
-        ? [urlFor(post.coverImage).width(1200).url()]
-        : [],
+      publishedTime: post.publishedAt,
+      authors: post.author?.name ? [post.author.name] : ["Urban Paparazzi"],
+      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: imageUrl ? [imageUrl] : [],
     },
   };
 }
@@ -71,9 +87,34 @@ export default async function NewsPostPage({ params }: PageProps) {
   const post = await getPost(slug);
   if (!post) notFound();
   const galleryImages = getGalleryImages(post);
+  const canonicalUrl = `${baseUrl}/news/${slug}`;
+  const imageUrl = post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).url()
+    : undefined;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+    headline: post.title,
+    description: post.excerpt || toPlainText(post.body),
+    image: imageUrl ? [imageUrl] : undefined,
+    datePublished: post.publishedAt,
+    author: post.author?.name
+      ? { "@type": "Person", name: post.author.name }
+      : { "@type": "Organization", name: "Urban Paparazzi Nigeria" },
+    publisher: {
+      "@type": "Organization",
+      name: "Urban Paparazzi Nigeria",
+      logo: { "@type": "ImageObject", url: `${baseUrl}/logo.png` },
+    },
+  };
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <ViewTracker type="news" slug={slug} />
       <div className="mb-4 flex flex-wrap gap-2">
         {post.categories?.map((c: { _id: string; title: string }) => (
@@ -86,7 +127,7 @@ export default async function NewsPostPage({ params }: PageProps) {
         ))}
       </div>
       <h1 className="text-3xl font-bold">{post.title}</h1>
-      <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
+      <div className="mt-2 flex items-center gap-4 text-xs md:text-sm text-gray-500">
         {post.author?.name && <span>By {post.author.name}</span>}
         <span className="flex items-center gap-1">
           <IoTimeOutline /> {dayjs(post.publishedAt).format("MMMM D, YYYY")}

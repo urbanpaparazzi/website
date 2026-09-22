@@ -15,6 +15,8 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://urbanpaparazzi.ng";
+
 async function getVideo(slug: string) {
   const { data } = await sanityFetch({ query: VIDEO_QUERY, params: { slug } });
   return data;
@@ -28,15 +30,27 @@ export async function generateMetadata({
   if (!video) return {};
 
   const description = toPlainText(video.description);
+  const canonicalUrl = `${baseUrl}/videos/${slug}`;
+  const imageUrl = video.thumbnail
+    ? urlFor(video.thumbnail).width(1200).height(675).url()
+    : undefined;
+
   return {
     title: `${video.title} | Urban Paparazzi Nigeria`,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
+      type: "video.other",
+      url: canonicalUrl,
       title: video.title,
       description,
-      images: video.thumbnail
-        ? [urlFor(video.thumbnail).width(1200).url()]
-        : [],
+      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 675 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: video.title,
+      description,
+      images: imageUrl ? [imageUrl] : [],
     },
   };
 }
@@ -45,9 +59,30 @@ export default async function VideoPage({ params }: PageProps) {
   const { slug } = await params;
   const video = await getVideo(slug);
   if (!video) notFound();
+  const canonicalUrl = `${baseUrl}/videos/${slug}`;
+  const thumbnailUrl = video.thumbnail
+    ? urlFor(video.thumbnail).width(1200).height(675).url()
+    : undefined;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: video.title,
+    description: toPlainText(video.description),
+    thumbnailUrl: thumbnailUrl ? [thumbnailUrl] : undefined,
+    uploadDate: video.publishedAt,
+    url: canonicalUrl,
+    author: video.author?.name
+      ? { "@type": "Person", name: video.author.name }
+      : { "@type": "Organization", name: "Urban Paparazzi Nigeria" },
+    contentUrl: video.landscapeVideoUrl || video.portraitVideoUrl || undefined,
+  };
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <ViewTracker type="video" slug={slug} />
       <div className="mb-4 flex flex-wrap gap-2">
         {video.categories?.map((c: { _id: string; title: string }) => (

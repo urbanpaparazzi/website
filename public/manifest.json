@@ -1,0 +1,17 @@
+{
+  "name": "Urban Paparazzi Nigeria",
+  "short_name": "Urban Paparazzi",
+  "description": "Nigerian news, entertainment, lifestyle and culture stories.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b91c1c",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
