@@ -28,9 +28,9 @@ export default function HeroNews({ news }) {
                     <IoTimeOutline />{" "}
                     {dayjs(post.createdAt).format("MMMM D, YYYY")}
                   </span>
-                  <span className="flex">
+                  {/* <span className="flex">
                     <LiaCommentSolid /> 20 comments
-                  </span>
+                  </span> */}
                 </div>
                 <div className={styles.textOverlay__description}>
                   <span>{post.description}</span>
