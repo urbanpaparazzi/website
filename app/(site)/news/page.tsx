@@ -6,6 +6,8 @@ import { IoTimeOutline, IoEyeOutline } from "react-icons/io5";
 import dayjs from "dayjs";
 import styles from "@/styles/news.module.scss";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Latest Nigerian News",
   description:
