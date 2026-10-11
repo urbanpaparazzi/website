@@ -1,5 +1,5 @@
 import { sanityFetch } from "@/sanity/lib/live";
-import { FEATURED_NEWS_QUERY } from "@/sanity/lib/queries";
+import { HOME_NEWS_QUERY } from "@/sanity/lib/queries";
 import { adaptNewsPosts } from "@/sanity/lib/newsAdapter";
 import MiniNews from "@/components/home/mini";
 import HeroNews from "@/components/home/hero";
@@ -16,12 +16,15 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [{ data: news }, { data: categories }] = await Promise.all([
-    sanityFetch({ query: FEATURED_NEWS_QUERY }),
+  const [{ data: homeNews }, { data: categories }] = await Promise.all([
+    sanityFetch({ query: HOME_NEWS_QUERY }),
     sanityFetch({ query: CATEGORIES_QUERY }),
   ]);
 
-  const adaptedNews = adaptNewsPosts(news ?? []);
+  const adaptedNews = adaptNewsPosts(homeNews?.featuredNews ?? []);
+  const adaptedEntertainmentNews = adaptNewsPosts(
+    homeNews?.entertainmentNews ?? [],
+  );
   const adaptedCategories = adaptCategories(categories ?? []);
 
   return (
@@ -35,6 +38,7 @@ export default async function HomePage() {
           header="Featured Stories"
           bg="#333333"
           news={adaptedNews}
+          entertainmentNews={adaptedEntertainmentNews}
           categories={adaptedCategories}
         />
       </div>

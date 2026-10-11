@@ -101,6 +101,32 @@ export const FEATURED_NEWS_QUERY = defineQuery(`
   publishedAt
 }`);
 
+export const HOME_NEWS_QUERY = defineQuery(`
+{
+  "featuredNews": *[_type == "newsPost"] | order(publishedAt desc)[0...12]{
+    _id,
+    title,
+    slug,
+    excerpt,
+    coverImage,
+    categories[]->{ _id, title, slug },
+    author->{ _id, name, slug, photo },
+    views,
+    publishedAt
+  },
+  "entertainmentNews": *[_type == "newsPost" && "entertainment" in categories[]->slug.current] | order(publishedAt desc)[0...3]{
+    _id,
+    title,
+    slug,
+    excerpt,
+    coverImage,
+    categories[]->{ _id, title, slug },
+    author->{ _id, name, slug, photo },
+    views,
+    publishedAt
+  }
+}`);
+
 export const NEWS_POST_QUERY = defineQuery(`
 *[_type == "newsPost" && slug.current == $slug][0]{
   _id,

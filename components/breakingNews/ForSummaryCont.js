@@ -26,14 +26,12 @@ export default function ForSummaryContinuation({ news, header, bg }) {
                   {post.category.name}
                 </p>
                 <p className={styles.summaryCont__news_name}>{post.name}</p>
-                <div className={styles.summaryCont__news_timestamp}>
-                  <span
-                    className={`flex ${styles.summaryCont__news_timestamp_1}`}
-                  >
-                    <IoTimeOutline /> {dayjs(post.createdAt).format("MMMM D")}
+                <div className="flex gap-1 text-xs items-center">
+                  <span className="">
+                    <IoTimeOutline />
                   </span>
-                  <span className="flex">
-                    <LiaCommentSolid /> 20 comments
+                  <span className="">
+                    {dayjs(post.createdAt).format("MMMM D, YYYY")}
                   </span>
                 </div>
                 <span className={styles.summaryCont__news_desc}>

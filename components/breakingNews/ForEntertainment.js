@@ -34,7 +34,7 @@ export default function ForEntertainment({ news, header, bg }) {
         </div>
         <div className={styles.line}></div>
         <div className={styles.breaking}>
-          {news.slice(12, 15).map((post, i) => (
+          {news.map((post, i) => (
             <div className={styles.breaking__news} key={i}>
               <img src={post.image} alt="" />
               <p className={styles.breaking__news_category}>
@@ -43,9 +43,11 @@ export default function ForEntertainment({ news, header, bg }) {
               <Link href={`/news/${post.slug}`}>
                 <p className={styles.breaking__news_name}>{post.name}</p>
               </Link>
-              <div className={styles.breaking__news_timestamp}>
-                <span className="flex">
-                  <IoTimeOutline />{" "}
+              <div className="flex gap-1 text-xs items-center">
+                <span className="">
+                  <IoTimeOutline />
+                </span>
+                <span className="">
                   {dayjs(post.createdAt).format("MMMM D, YYYY")}
                 </span>
               </div>

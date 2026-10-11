@@ -9,7 +9,13 @@ import ForSummary from "./ForSummary";
 import ForSummaryContinuation from "./ForSummaryCont";
 import ForCategories from "./ForCategories";
 import ForCreatorsHome from "./ForCreatorsHome";
-export default function BreakingNews({ header, news, bg, categories }) {
+export default function BreakingNews({
+  header,
+  news,
+  entertainmentNews,
+  bg,
+  categories,
+}) {
   // console.log(products);
   return (
     <>
@@ -25,7 +31,7 @@ export default function BreakingNews({ header, news, bg, categories }) {
                 bg="#333333"
               />
               <ForEntertainment
-                news={news}
+                news={entertainmentNews}
                 header="Entertainment"
                 bg="#333333"
               />
